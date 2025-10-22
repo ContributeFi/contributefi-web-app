@@ -9,7 +9,6 @@ import { useNavigate } from "react-router";
 import { SignUpSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { setItemInLocalStorage } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { createAccount } from "@/services";
 import { toast } from "react-toastify";
@@ -37,19 +36,19 @@ function CreateAccount() {
     useMutation({
       mutationFn: (data) => createAccount(data),
       onSuccess: async (data, variable) => {
-        console.log({ data });
         if (data.status === 201) {
-          setItemInLocalStorage("user", data.data.content);
           login({
             token: data.data.content.accessToken.token,
-            user: null,
             email: variable.email,
+            user: null,
+            otp: null,
+            username: null,
           });
           navigate("/get-started/verify-email");
           toast.success("OTP sent successfully");
           reset();
         } else {
-          console.toast.error("Something went wrong");
+          toast.error("Something went wrong");
         }
       },
       onError: (error) => {

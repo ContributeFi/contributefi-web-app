@@ -1,7 +1,7 @@
 import CustomInput from "@/components/CustomInput";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { getItemFromLocalStorage } from "@/lib/utils";
+import { setItemInLocalStorage } from "@/lib/utils";
 import { UsernameSchema } from "@/schemas";
 import { checkUsernameAvailability, createUsername } from "@/services";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -49,10 +49,11 @@ function Username() {
       onSuccess: async (data, variable) => {
         console.log({ data });
         if (data.status === 200) {
+          setItemInLocalStorage("users", data.data.content);
           login({
             token: token,
-            user: getItemFromLocalStorage("user"),
             email: email,
+            user: null,
             otp: otp,
             username: variable.username,
           });

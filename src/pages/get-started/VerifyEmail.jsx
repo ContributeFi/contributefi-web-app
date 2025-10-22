@@ -39,9 +39,10 @@ function VerifyEmail() {
         if (data.status === 200) {
           login({
             token: token,
-            user: null,
             email: email,
+            user: null,
             otp: variable.otp,
+            username: null,
           });
           navigate("/get-started/username");
           toast.success("Email verified successfully");
@@ -79,7 +80,7 @@ function VerifyEmail() {
   };
 
   const onSubmit = (data) => {
-    verifyEmailMutation(data);
+    verifyEmailMutation({ ...data, email });
   };
 
   if (!email) {

@@ -10,8 +10,12 @@ import { FaSquareXTwitter } from "react-icons/fa6";
 import { FaTelegram } from "react-icons/fa";
 import { PiPlugsConnectedFill } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
-import { getItemFromLocalStorage } from "@/lib/utils";
+import {
+  getItemFromLocalStorage,
+  removeItemFromLocalStorage,
+} from "@/lib/utils";
 import { FaEnvelope } from "react-icons/fa";
+import { useAuth } from "@/hooks/useAuth";
 
 const ACCOUNTS_TO_LINK = [
   {
@@ -37,7 +41,7 @@ const ACCOUNTS_TO_LINK = [
 ];
 
 function AccountConfiguration() {
-  const [username] = useState(getItemFromLocalStorage("username"));
+  const { login, token, email, otp, username } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,6 +71,17 @@ function AccountConfiguration() {
         </p>
         <Link
           to="/dashboard"
+          onClick={() => {
+            login({
+              token: token,
+              email: email,
+              user: getItemFromLocalStorage("users"),
+              otp: otp,
+              username: username,
+            });
+
+            removeItemFromLocalStorage("users");
+          }}
           className="absolute top-5 right-10 text-base font-medium text-[#2F0FD1] sm:top-10"
         >
           Skip till Later &gt;&gt;

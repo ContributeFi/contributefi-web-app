@@ -27,7 +27,7 @@ export function resendOTP(data) {
   const accessToken = getItemFromLocalStorage("accessToken");
 
   return axios.post(
-    `${import.meta.env.VITE_BASE_URL}/auth/resend-otp`,
+    `${import.meta.env.VITE_BASE_URL}/auth/send-otp`,
     requestPayload,
     {
       headers: {
@@ -42,6 +42,7 @@ export function verifyEmail(data) {
   const requestPayload = {
     otpPurpose: "EMAIL_VERIFICATION",
     otpCode: data.otp,
+    email: data.email,
   };
 
   const accessToken = getItemFromLocalStorage("accessToken");
@@ -66,7 +67,7 @@ export function createUsername(data) {
   const accessToken = getItemFromLocalStorage("accessToken");
 
   return axios.post(
-    `${import.meta.env.VITE_BASE_URL}/user/username`,
+    `${import.meta.env.VITE_BASE_URL}/users/username`,
     requestPayload,
     {
       headers: {
@@ -81,7 +82,7 @@ export function checkUsernameAvailability(username) {
   const accessToken = getItemFromLocalStorage("accessToken");
 
   return axios.get(
-    `${import.meta.env.VITE_BASE_URL}/user/check-username?username=${username}`,
+    `${import.meta.env.VITE_BASE_URL}/users/check-username?username=${username}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

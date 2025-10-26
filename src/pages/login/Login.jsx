@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { LoginSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -89,7 +89,10 @@ function Login() {
           Welcome Back
         </h2>
         <p className="text-base font-light text-[#525866] md:text-[18px]">
-          Sign in to access your account
+          Sign in to access your account or{" "}
+          <Link className="text-[#2F0FD1] hover:underline" to="/get-started">
+            Create Account
+          </Link>
         </p>
       </div>
 
@@ -140,7 +143,7 @@ function Login() {
             >
               {loginPending ? "Processing" : "Log In"}
             </Button>
-
+            {/* 
             <Button
               className="w-full border-none bg-white shadow-none"
               variant="outline"
@@ -150,7 +153,7 @@ function Login() {
               onClick={() => navigate("/get-started")}
             >
               Create Account
-            </Button>
+            </Button> */}
           </div>
         </form>
       </div>

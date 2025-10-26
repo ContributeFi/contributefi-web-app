@@ -76,13 +76,10 @@ function Communities() {
   const communityName = queryParams.get("community");
 
   const handleSort = (order) => {
-    console.log("Sort by:", order);
     setSortOrder(order);
     setCurrentPage(1);
     refetch();
   };
-
-  console.log("Fetching with:", sortOrder);
 
   return (
     <>

@@ -58,6 +58,6 @@ export const CreateCommunitySchema = z.object({
   githubPage: socialUrlSchema("Enter a valid GitHub URL"),
   twitterPage: socialUrlSchema("Enter a valid Twitter URL"),
   instagramPage: socialUrlSchema("Enter a valid Instagram URL"),
-  communityDescription: z.string().min(1, "Community description is required"),
+  communityDescription: z.string().optional(),
   message: z.string().optional(),
 });

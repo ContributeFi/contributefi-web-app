@@ -5,7 +5,7 @@ import { IoMdEyeOff } from "react-icons/io";
 import { IoEye } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 import { PiPlugsConnectedFill } from "react-icons/pi";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { SignUpSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -68,7 +68,10 @@ function CreateAccount() {
           Create Account
         </h2>
         <p className="text-base font-light text-[#525866] md:text-[18px]">
-          Get started with a preferred option
+          Get started with a preferred option or{" "}
+          <Link className="text-[#2F0FD1] hover:underline" to="/login">
+            Login
+          </Link>
         </p>
       </div>
 
@@ -129,7 +132,7 @@ function CreateAccount() {
               {createAccountPending ? "Processing..." : "Continue"}
             </Button>
 
-            <Button
+            {/* <Button
               className="w-full border-none bg-white shadow-none"
               variant="outline"
               size="lg"
@@ -138,7 +141,7 @@ function CreateAccount() {
               onClick={() => navigate("/login")}
             >
               Login
-            </Button>
+            </Button> */}
           </div>
         </form>
       </div>

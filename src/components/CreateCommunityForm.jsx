@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { createCommunity } from "@/services";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function CreateCommunityForm() {
   const [open, setOpen] = useState(false);
@@ -37,7 +37,6 @@ function CreateCommunityForm() {
     useMutation({
       mutationFn: (data) => createCommunity(data),
       onSuccess: async (data) => {
-        console.log({ data });
         if (data.status === 201) {
           toast.success("Community created successfully");
           reset();
@@ -54,9 +53,14 @@ function CreateCommunityForm() {
     });
 
   const onSubmit = (data) => {
-    console.log(data);
     createCommunityMutation(data);
   };
+
+  useEffect(() => {
+    if (!open) {
+      reset();
+    }
+  }, [open, reset]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

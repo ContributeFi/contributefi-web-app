@@ -2,9 +2,7 @@ import { LuArrowUpDown } from "react-icons/lu";
 
 const Sort = ({ onToggle, order = "DESC" }) => {
   const handleToggle = () => {
-    console.log("Current sort order:", order);
     const newOrder = order === "DESC" ? "ASC" : "DESC";
-    console.log("Toggling sort order to:", newOrder);
     onToggle?.(newOrder);
   };
 

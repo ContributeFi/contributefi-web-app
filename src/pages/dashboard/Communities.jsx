@@ -8,7 +8,7 @@ import {
   COMMUNITIES_TAG,
   TASKS,
 } from "@/lib/constants";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { FaLink } from "react-icons/fa6";
 import { RiTwitterXFill } from "react-icons/ri";
@@ -26,6 +26,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getCommunities,
   getCommunity,
+  getMemberCommunities,
   joinCommunity,
   leaveCommunity,
 } from "@/services";
@@ -43,6 +44,8 @@ function Communities() {
   const [communityView, setCommunityView] = useState("all");
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const [communityOwnerId, setCommunityOwnerId] = useState();
+  const [displayedCommunities, setDisplayedCommunities] = useState([]);
 
   const LIMIT = 10;
   const OFFSET = (currentPage - 1) * LIMIT;
@@ -53,17 +56,88 @@ function Communities() {
     isError: errorLoadingCommunities,
     refetch,
   } = useQuery({
-    queryKey: ["communities", LIMIT, OFFSET, sortOrder],
+    queryKey: ["communities", LIMIT, OFFSET, sortOrder, communityOwnerId],
     queryFn: () =>
-      getCommunities({ limit: LIMIT, offset: OFFSET, sort: sortOrder }),
+      getCommunities({
+        limit: LIMIT,
+        offset: OFFSET,
+        sort: sortOrder,
+        communityOwnerId,
+      }),
     keepPreviousData: true,
   });
 
-  const communities = communitiesData?.data ?? [];
+  const {
+    data: memberCommunitiesData,
+    isLoading: loadingMemberCommunities,
+    isError: errorLoadingMemberCommunities,
+  } = useQuery({
+    queryKey: ["communities", LIMIT, OFFSET],
+    queryFn: () =>
+      getMemberCommunities({
+        limit: LIMIT,
+        offset: OFFSET,
+      }),
+    keepPreviousData: true,
+  });
+
+  // let communities = communitiesData?.data ?? [];
   const totalPages = communitiesData?.totalPages ?? 1;
+
+  useEffect(() => {
+    if (communityView === "all" || communityView === "created") {
+      setDisplayedCommunities(communitiesData?.data ?? []);
+    }
+  }, [communitiesData, communityView]);
+
+  useEffect(() => {
+    if (communityView === "joined") {
+      setDisplayedCommunities(memberCommunitiesData?.data ?? []);
+    }
+  }, [memberCommunitiesData, communityView]);
+
+  // const handleChangeCommunityView = (view) => {
+  //   if (view === "created") {
+  //     setCommunityOwnerId(user.id);
+  //     refetch();
+  //     setCommunityView(view);
+  //     return;
+  //   }
+
+  //   if (view === "joined") {
+  //     setCommunityOwnerId(user.id);
+  //     communities = memberCommunitiesData?.data ?? [];
+  //     setCommunityView(view);
+  //     return;
+  //   }
+
+  //   if (view === "all") {
+  //     setCommunityOwnerId("");
+  //     refetch();
+  //     setCommunityView(view);
+  //     return;
+  //   }
+  // };
 
   const handleChangeCommunityView = (view) => {
     setCommunityView(view);
+
+    if (view === "created") {
+      setCommunityOwnerId(user.id);
+      refetch(); // fetch created ones
+      return;
+    }
+
+    if (view === "joined") {
+      setCommunityOwnerId(""); // optional, not used here
+      return; // memberCommunitiesData effect will handle the data
+    }
+
+    if (view === "all") {
+      setCommunityOwnerId("");
+      refetch();
+      return;
+    }
   };
 
   const [detailView, setDetailView] = useState("tasks");
@@ -122,19 +196,6 @@ function Communities() {
 
         return { previousCommunity };
       },
-      // onSuccess: async (data) => {
-      // console.log({ data });
-      // if (data.status === 201) {
-      //   refetchCommunity();
-      //   toast.success("Community joined successfully");
-      // } else {
-      //   toast.error("Something went wrong");
-      // }
-      // },
-      // onError: (error) => {
-      //   console.error("Error:", error.response.data.message);
-      //   toast.error(error.response.data.message);
-      // },
 
       onError: (error, _, context) => {
         // Rollback on error
@@ -150,7 +211,6 @@ function Communities() {
         queryClient.invalidateQueries(["community", communityId]);
       },
       onSuccess: (data) => {
-        console.log({ data });
         if (data.status === 201) {
           toast.success("Community joined successfully");
         } else {
@@ -181,20 +241,6 @@ function Communities() {
 
         return { previousCommunity };
       },
-      // onSuccess: async (data) => {
-      // console.log({ data });
-      // if (data.status === 201) {
-      //   refetchCommunity();
-      //   toast.success("Successfully left the community");
-      // } else {
-      //   toast.error("Something went wrong");
-      // }
-      // },
-      // onError: (error) => {
-      //   console.error("Error:", error.response.data.message);
-      //   toast.error(error.response.data.message);
-      // },
-
       onError: (error, _, context) => {
         queryClient.setQueryData(
           ["community", communityId],
@@ -208,7 +254,6 @@ function Communities() {
         queryClient.invalidateQueries(["community", communityId]);
       },
       onSuccess: (data) => {
-        console.log({ data });
         if (data.status === 201) {
           toast.success("Successfully left the community");
         } else {
@@ -220,8 +265,6 @@ function Communities() {
   const handleLeaveCommunity = () => {
     leaveCommunityMutation(communityId);
   };
-
-  console.log({ communities });
 
   return (
     <>
@@ -514,17 +557,17 @@ function Communities() {
               </div>
             </div>
 
-            {loadingCommunities ? (
+            {loadingCommunities || loadingMemberCommunities ? (
               <Loader />
-            ) : errorLoadingCommunities ? (
+            ) : errorLoadingCommunities || errorLoadingMemberCommunities ? (
               <Error title="Failed to load communities." />
-            ) : communities.length === 0 ? (
+            ) : displayedCommunities.length === 0 ? (
               <div className="flex h-32 items-center justify-center">
                 <p className="text-2xl font-bold">No communities found...</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-                {communities.map((community, i) => (
+                {displayedCommunities.map((community, i) => (
                   <CommunitiesCard
                     community={community}
                     key={i}

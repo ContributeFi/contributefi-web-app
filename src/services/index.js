@@ -140,9 +140,25 @@ export const getCommunities = async ({
   limit = 10,
   offset = 1,
   sort = "DESC",
+  communityOwnerId = "",
 } = {}) => {
   const { data } = await axios.get(
-    `${import.meta.env.VITE_BASE_URL}/communities?sortDirection=${sort}&limit=${limit}&offset=${offset}`,
+    `${import.meta.env.VITE_BASE_URL}/communities?sortBy=createdAt:${sort}&limit=${limit}&offset=${offset}&${communityOwnerId !== "" && `communityOwnerId=${communityOwnerId}`}`,
+  );
+
+  return data.content;
+};
+
+export const getMemberCommunities = async ({ limit = 10, offset = 1 } = {}) => {
+  const accessToken = getItemFromLocalStorage("accessToken");
+
+  const { data } = await axios.get(
+    `${import.meta.env.VITE_BASE_URL}/members/my-communities?includeRemoved=false&limit=${limit}&offset=${offset}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
   );
 
   return data.content;

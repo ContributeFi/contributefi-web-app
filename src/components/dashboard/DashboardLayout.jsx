@@ -15,7 +15,9 @@ import DashboardLogo from "./DashboardLogo";
 import { useAuth } from "@/hooks/useAuth";
 
 function DashboardLayout() {
-  const { user } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
+
+  console.log({ user, isAuthenticated, loading });
 
   const [sheetIsOpen, setSheetIsOpen] = useState(false);
 
@@ -47,12 +49,16 @@ function DashboardLayout() {
 
         <DashboardLogo />
 
-        <img
-          src={
-            !user?.profileImageUrl ? "/Frame 43596.svg" : user?.profileImageUrl
-          }
-          alt=""
-        />
+        {isAuthenticated && (
+          <img
+            src={
+              !user?.profileImageUrl
+                ? "/Frame 43596.svg"
+                : user?.profileImageUrl
+            }
+            alt=""
+          />
+        )}
       </DashboardMobileHeader>
 
       <DashboardSidebarContainer>
@@ -82,12 +88,16 @@ function DashboardLayout() {
             </div>
           )}
 
-          <img
-            src={
-              !user?.profileImageUrl ? "/Frame 43596.svg" : user?.profileImageUrl
-            }
-            alt=""
-          />
+          {isAuthenticated && (
+            <img
+              src={
+                !user?.profileImageUrl
+                  ? "/Frame 43596.svg"
+                  : user?.profileImageUrl
+              }
+              alt=""
+            />
+          )}
         </div>
       </DashboardDesktopHeader>
 

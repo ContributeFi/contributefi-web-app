@@ -34,6 +34,7 @@ import Loader from "@/components/Loader";
 import Error from "@/components/Error";
 import { toast } from "react-toastify";
 import { useAuth } from "@/hooks/useAuth";
+import NewQuest from "@/components/dashboard/NewQuest";
 
 const TASKS_PER_PAGE = 15;
 
@@ -46,6 +47,7 @@ function Communities() {
   const queryClient = useQueryClient();
   const [communityOwnerId, setCommunityOwnerId] = useState();
   const [displayedCommunities, setDisplayedCommunities] = useState([]);
+  const [sheetIsOpen, setSheetIsOpen] = useState(false);
 
   const LIMIT = 10;
   const OFFSET = (currentPage - 1) * LIMIT;
@@ -369,9 +371,10 @@ function Communities() {
                           Edit Details
                         </Button>
 
-                        <Button className="cursor-pointer rounded-md bg-[#2F0FD1] px-8 py-5 hover:bg-[#2F0FD1]/70">
-                          Create Task
-                        </Button>
+                        <NewQuest
+                          sheetIsOpen={sheetIsOpen}
+                          setSheetIsOpen={setSheetIsOpen}
+                        />
                       </div>
                     ) : (
                       <Button

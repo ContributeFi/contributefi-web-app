@@ -19,7 +19,11 @@ import CustomDateSelect from "../CustomDateSelect";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { Fragment, useState } from "react";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
-import { getItemFromLocalStorage, setItemInLocalStorage } from "@/lib/utils";
+import {
+  getItemFromLocalStorage,
+  removeItemFromLocalStorage,
+  setItemInLocalStorage,
+} from "@/lib/utils";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { formatDateToYYYYMMDD } from "@/utils";
 
@@ -857,6 +861,7 @@ function GrowthQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
                   onClick={() => {
                     setSheetIsOpen(false);
                     setOpenQuestSuccess(true);
+                    removeItemFromLocalStorage("growthQuestStep");
                   }}
                 >
                   Publish Quest

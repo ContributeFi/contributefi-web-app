@@ -132,8 +132,10 @@ function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
   useEffect(() => {
     if (questGoal === "Recruit Candidates") {
       setValue("questVisibility", "Open Quest");
+      setValue("selectionMethod", "First to Complete");
     } else {
       setValue("questVisibility", "");
+      setValue("selectionMethod", "Manual Assignment Required");
     }
   }, [questGoal, setValue, watch]);
 
@@ -372,6 +374,7 @@ function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
                     type="number"
                     error={errors.numberOfPeople?.message}
                     {...register("numberOfPeople", { valueAsNumber: true })}
+                    disabled={questGoal === "Project-based"}
                   />
                   <CustomSelect
                     label="Selection Method"
@@ -379,6 +382,7 @@ function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
                     options={SELECTION_METHOD}
                     error={errors.selectionMethod?.message}
                     register={register("selectionMethod")}
+                    disabled
                   />
                 </div>
               )}

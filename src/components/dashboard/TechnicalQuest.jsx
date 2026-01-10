@@ -348,7 +348,7 @@ function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
                           buttonText={
                             watch("candidateListFile")?.name || "Upload List"
                           }
-                          // accept="text/csv"
+                          accept="text/csv"
                           onChange={(e) => {
                             const file = e.target.files?.[0] ?? null;
                             field.onChange(file);

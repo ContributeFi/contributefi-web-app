@@ -9,7 +9,7 @@ import {
   TASKS,
 } from "@/lib/constants";
 import React, { Fragment, useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useParams } from "react-router";
 import { FaLink } from "react-icons/fa6";
 import { RiTwitterXFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
@@ -40,7 +40,6 @@ import QuestSuccess from "@/components/dashboard/QuestSuccess";
 const TASKS_PER_PAGE = 15;
 
 function Communities() {
-  const location = useLocation();
   const [sortOrder, setSortOrder] = useState("DESC");
   const [currentPage, setCurrentPage] = useState(1);
   const [communityView, setCommunityView] = useState("all");
@@ -138,8 +137,7 @@ function Communities() {
     taskStartIndex + TASKS_PER_PAGE,
   );
 
-  const queryParams = new URLSearchParams(location.search);
-  const communityId = queryParams.get("community");
+  const { communityAlias: communityId } = useParams();
 
   const handleSort = (order) => {
     setSortOrder(order);
@@ -246,8 +244,6 @@ function Communities() {
   const handleLeaveCommunity = () => {
     leaveCommunityMutation(communityId);
   };
-
-
 
   return (
     <>

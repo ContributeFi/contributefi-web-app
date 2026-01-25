@@ -29,9 +29,13 @@ import {
   REWARD_TYPES,
   SELECTION_METHOD,
 } from "@/utils/constants";
-import { hydrateGrowthQuestData } from "@/utils";
+import {
+  hydrateGrowthQuestData,
+  mapFormToCreateTechnicalQuestPayload,
+} from "@/utils";
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import FileUpload from "../FileUpload";
+import { createTechnicalQuest } from "@/services";
 
 const QUEST_GOAL = ["Project-based", "Recruit Candidates"];
 const QUEST_VISIBILITY = ["Open Quest", "Closed Quest"];
@@ -40,7 +44,7 @@ const QUEST_TYPES = [
   { label: "Development", value: "Development" },
 ];
 
-function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
+function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess, communityId }) {
   const isDesktop = useIsDesktop();
   const [open, setOpen] = useState(false);
   const side = isDesktop ? "right" : "bottom";
@@ -149,7 +153,34 @@ function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
     }
   }, [questGoal, questVisibility, setValue]);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   console.log({ errors, step1Data });
+
+  const handlePublishQuest = async () => {
+    console.log({ step1Data });
+    try {
+      const payload = JSON.parse(
+        JSON.stringify(mapFormToCreateTechnicalQuestPayload(step1Data)),
+      );
+
+      console.log({ payload });
+
+      setIsSubmitting(true);
+      await createTechnicalQuest(payload, communityId);
+
+      setIsSubmitting(false);
+
+      setSheetIsOpen(false);
+      setOpenQuestSuccess(true);
+
+      removeItemFromLocalStorage("growthQuestStep");
+      removeItemFromLocalStorage("growthQuestStep1Data");
+    } catch (error) {
+      console.error("Failed to create growth quest", error);
+      // TODO: toast / error UI
+    }
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -741,13 +772,14 @@ function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
                     type="submit"
                     className="mt-5 w-full"
                     onClick={() => {
-                      setSheetIsOpen(false);
-                      setOpenQuestSuccess(true);
-                      removeItemFromLocalStorage("technicalQuestStep");
-                      removeItemFromLocalStorage("technicalQuestStep1Data");
+                      // setSheetIsOpen(false);
+                      // setOpenQuestSuccess(true);
+                      // removeItemFromLocalStorage("technicalQuestStep");
+                      // removeItemFromLocalStorage("technicalQuestStep1Data");
+                      handlePublishQuest();
                     }}
                   >
-                    Publish Quest
+                    {isSubmitting ? "Publishing..." : "Publish Quest"}
                   </Button>
                 </>
               ) : technicalQuestStep === 2 &&
@@ -808,14 +840,15 @@ function TechnicalQuest({ setSheetIsOpen, setOpenQuestSuccess }) {
                     type="submit"
                     className="mt-5 w-full"
                     onClick={() => {
-                      setSheetIsOpen(false);
-                      setOpenQuestSuccess(true);
-                      removeItemFromLocalStorage("technicalQuestStep");
-                      removeItemFromLocalStorage("technicalQuestStep1Data");
+                      // setSheetIsOpen(false);
+                      // setOpenQuestSuccess(true);
+                      // removeItemFromLocalStorage("technicalQuestStep");
+                      // removeItemFromLocalStorage("technicalQuestStep1Data");
+                      handlePublishQuest();
                     }}
                     disabled={rewardAllWithPoints && !extraPoints}
                   >
-                    Publish Quest
+                    {isSubmitting ? "Publishing..." : "Publish Quest"}
                   </Button>
                 </>
               )}

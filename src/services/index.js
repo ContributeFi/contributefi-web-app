@@ -109,6 +109,15 @@ export function createOnChainQuest(payload, communityId) {
   );
 }
 
+export function createTechnicalQuest(payload, communityId) {
+  console.log({ payload });
+
+  return api.post(
+    `${import.meta.env.VITE_BASE_URL}/quests/${communityId}/technical`,
+    payload,
+  );
+}
+
 export const getCommunities = async ({
   limit = 10,
   offset = 1,

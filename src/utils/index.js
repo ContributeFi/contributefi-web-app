@@ -278,3 +278,100 @@ export const mapFormToCreateOnChainQuestPayload = (data) => {
 
   return payload;
 };
+
+export const mapFormToCreateTechnicalQuestPayload = (data) => {
+  console.log({ data });
+  const payload = {
+    questTitle: data.questTitle,
+    questDescription: data.questDescription,
+    rewardType: data.rewardType === "Token" ? "Token" : "Points",
+    runContinuously: data.runContinuously,
+    rewardMode: data.rewardMode === "Overall Reward" ? "Overall" : "Individual",
+
+    tasks: [],
+  };
+
+  if (data.tokenContract) {
+    payload.tokenContract = data.tokenContract;
+  }
+
+  if (data.numberOfWinners) {
+    payload.numberOfWinners = data.numberOfWinners;
+  }
+
+  if (data.winnerSelectionMethod) {
+    payload.winnerSelectionMethod = data.winnerSelectionMethod;
+  }
+
+  if (data.endDate) {
+    payload.endDate = new Date(data.endDate).toISOString();
+  }
+
+  if (data.pointsPerWinner) {
+    payload.pointsPerWinner = data.pointsPerWinner;
+  }
+
+  if (data.tokensPerWinner) {
+    payload.tokensPerWinner = data.tokensPerWinner;
+  }
+
+  if (data.verificationMode) {
+    payload.verificationMode = data.verificationMode;
+  }
+
+  if (data.contractAddress) {
+    payload.contractAddress = data.contractAddress;
+  }
+
+  if (data.questType) {
+    payload.questType = data.questType;
+  }
+
+  if (data.questGoal) {
+    payload.questGoal = data.questGoal;
+  }
+
+  if (data.numberOfPeople) {
+    payload.numberOfPeople = data.numberOfPeople;
+  }
+
+  if (data.selectionMethod) {
+    payload.selectionMethod = data.selectionMethod;
+  }
+
+  // ----------------------------
+  // Tasks mapping
+  // ----------------------------
+  payload.tasks = data.tasks.map((task) => {
+    const taskPayload = {
+      type: task.type,
+    };
+
+    if (data.rewardMode === "INDIVIDUAL" && data.rewardType === "Token") {
+      taskPayload.tokensPerTask = task.tokensPerTask;
+    }
+
+    if (data.rewardMode === "INDIVIDUAL" && data.rewardType === "Points") {
+      taskPayload.pointsPerTask = task.pointsPerTask;
+    }
+
+    if (task.function) taskPayload.function = task.function;
+    if (task.description) taskPayload.description = task.description;
+    if (task.instruction) taskPayload.instruction = task.instruction;
+    if (task.links) taskPayload.links = task.links;
+
+    return taskPayload;
+  });
+
+  // ----------------------------
+  // Optional flags
+  // ----------------------------
+  if (data.makeConcurrent) payload.makeConcurrent = true;
+
+  if (data.rewardAllWithPoints) {
+    payload.rewardAllWithPoints = true;
+    payload.extraPoints = data.extraPoints;
+  }
+
+  return payload;
+};

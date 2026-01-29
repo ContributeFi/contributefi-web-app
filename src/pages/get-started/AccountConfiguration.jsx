@@ -18,7 +18,7 @@ import {
 import { FaEnvelope } from "react-icons/fa";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "react-toastify";
-import { uploadProfilePicture } from "@/services";
+import { updateBio, uploadProfilePicture } from "@/services";
 import { ImSpinner5 } from "react-icons/im";
 
 const ACCOUNTS_TO_LINK = [
@@ -49,7 +49,7 @@ function AccountConfiguration() {
   const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
 
-  console.log({ user });
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!username) {
@@ -108,12 +108,41 @@ function AccountConfiguration() {
     if (!bio) {
       navigate("/dashboard");
     } else {
-      // Add logic to save bio if needed
+      setSaving(true);
+      try {
+        const res = await updateBio(bio);
+
+        console.log({ res });
+        if (res?.data?.content?.bio) {
+          setUser((prevUser) => {
+            const updatedUser = {
+              ...prevUser,
+              bio: res.data.content.bio,
+            };
+            setItemInLocalStorage("user", updatedUser);
+            return updatedUser;
+          });
+          toast.success("Bio updated successfully");
+        } else {
+          toast.error("Failed to save bio");
+          setSaving(false);
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("Failed to save bio");
+        return;
+      } finally {
+        setSaving(false);
+      }
+
       navigate("/dashboard");
     }
 
     // Save user details logic here
   };
+
+  console.log({ bio: bio.length });
 
   return (
     <div>
@@ -176,6 +205,8 @@ function AccountConfiguration() {
           <Textarea
             className="h-[80px] rounded-[12px] border-none bg-[#F7F9FD] px-4 placeholder:text-sm placeholder:text-[#8791A7] focus:border-none focus:outline-0 focus:outline-none focus-visible:border-none focus-visible:ring-0"
             placeholder="Briefly tell us about you"
+            onChange={(e) => setBio(e.target.value)}
+            value={bio}
           />
         </div>
 
@@ -210,13 +241,17 @@ function AccountConfiguration() {
 
           <Button
             className="ml-auto w-full sm:w-fit"
-            disabled={uploading || !user?.profileImageUrl}
+            disabled={
+              uploading ||
+              (!user?.profileImageUrl && bio.trim().length === 0) ||
+              saving
+            }
             variant="secondary"
             size="lg"
             type="button"
             onClick={handleSaveDetails}
           >
-            Save Details
+            {saving ? "Saving..." : "Save Details"}
           </Button>
         </div>
       </div>

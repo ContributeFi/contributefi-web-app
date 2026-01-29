@@ -216,3 +216,9 @@ export const uploadProfilePicture = (file) => {
     },
   );
 };
+
+export const updateBio = (bio) => {
+  return api.patch(`${import.meta.env.VITE_BASE_URL}/users/update-profile`, {
+    bio,
+  });
+};

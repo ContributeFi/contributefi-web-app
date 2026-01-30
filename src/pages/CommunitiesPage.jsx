@@ -1,7 +1,7 @@
 import CommunitiesCard from "@/components/CommunitiesCard";
 import Filter from "@/components/Filter";
 import CustomPagination from "@/components/CustomPagination";
-import React, { useState } from "react";
+import { useState } from "react";
 import BackButton from "@/components/BackButton";
 import CustomSearch from "@/components/Search";
 import Loader from "@/components/Loader";

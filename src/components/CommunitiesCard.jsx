@@ -24,6 +24,8 @@ function CommunitiesCard({ community }) {
     queryFn: () => getCommunity(community.id),
     enabled: isAuthenticated && !!community.id,
     keepPreviousData: true,
+    staleTime: 0,
+    cacheTime: 0,
   });
 
   const { mutate: joinCommunityMutation, isPending: joinCommunityPending } =

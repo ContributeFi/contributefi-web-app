@@ -33,10 +33,8 @@ function DashboardLayout() {
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const currentPath = pathSegments[pathSegments.length - 1];
 
-  const queryParams = new URLSearchParams(location.search);
-  const taskTitle = queryParams.get("task");
-
   const { communityAlias: communityId } = useParams();
+  const { taskId } = useParams();
 
   const [uploading, setUploading] = useState(false);
 
@@ -153,7 +151,7 @@ function DashboardLayout() {
       </DashboardSidebarContainer>
 
       <DashboardDesktopHeader>
-        {communityId || taskTitle ? <BackButton /> : <Heading />}
+        {communityId || taskId ? <BackButton /> : <Heading />}
 
         <div className="flex items-center gap-4">
           {currentPath === "communities" && !communityId && (
@@ -162,11 +160,9 @@ function DashboardLayout() {
                 <CustomSearch placeholder="Search community" />
               </div>
 
-              {isAuthenticated && (
-                <div>
-                  <CreateCommunityForm />
-                </div>
-              )}
+              <div>
+                <CreateCommunityForm />
+              </div>
             </div>
           )}
 

@@ -2,13 +2,17 @@ import { useAuth } from "@/hooks/useAuth";
 import { COMMUNITY_TAG_BG } from "@/lib/constants";
 import { getCommunity, joinCommunity, leaveCommunity } from "@/services";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
+import { ImSpinner5 } from "react-icons/im";
+import { useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 function CommunitiesCard({ community }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user, isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  console.log({ location });
 
   const handleOpen = () => {
     navigate(
@@ -187,15 +191,15 @@ function CommunitiesCard({ community }) {
           onClick={data?.isMember ? handleLeaveCommunity : handleJoinCommunity}
           className={`cursor-pointer font-medium ${data?.isMember ? "text-[#F31307]" : "text-[#2F0FD1]"} disabled:cursor-not-allowed`}
         >
-          {community?.communityOwnerId === user?.id
-            ? ""
-            : joinCommunityPending
-              ? "Joining..."
-              : leaveCommunityPending
-                ? "Leaving..."
-                : data?.isMember
-                  ? "Leave"
-                  : "+ Join"}
+          {community?.communityOwnerId === user?.id ? (
+            ""
+          ) : joinCommunityPending || leaveCommunityPending ? (
+            <ImSpinner5 className="animate-spin" />
+          ) : data?.isMember ? (
+            "Leave"
+          ) : (
+            "+ Join"
+          )}
         </button>
       </div>
     </div>

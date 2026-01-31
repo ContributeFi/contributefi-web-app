@@ -120,7 +120,6 @@ function AccountConfiguration() {
             };
             setItemInLocalStorage("user", updatedUser);
 
-            console.log("Updated user:", updatedUser);
             return updatedUser;
           });
           toast.success("Bio updated successfully");

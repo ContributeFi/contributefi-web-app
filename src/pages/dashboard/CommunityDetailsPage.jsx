@@ -1,4 +1,4 @@
-import { FaLink } from "react-icons/fa6";
+import { FaLink, FaUserLarge } from "react-icons/fa6";
 import { RiTwitterXFill } from "react-icons/ri";
 import { RiInstagramFill } from "react-icons/ri";
 import { LuGithub } from "react-icons/lu";
@@ -26,6 +26,10 @@ import CustomSearch from "@/components/Search";
 import Filter from "@/components/Filter";
 import Sort from "@/components/Sort";
 import CustomPagination from "@/components/CustomPagination";
+import { ImSpinner5 } from "react-icons/im";
+import { FaPlus } from "react-icons/fa";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 function CommunityDetailsPage() {
   const [sortOrder, setSortOrder] = useState("DESC");
@@ -45,7 +49,6 @@ function CommunityDetailsPage() {
     queryKey: ["community", communityId],
     queryFn: () => getCommunity(communityId),
     enabled: !!communityId,
-    keepPreviousData: true,
   });
 
   const LIMIT = 10;
@@ -119,6 +122,10 @@ function CommunityDetailsPage() {
     });
 
   const handleJoinCommunity = () => {
+    if (!user) {
+      toast.error("You need to be logged in to join a community");
+      return;
+    }
     joinCommunityMutation(communityId);
   };
 
@@ -171,6 +178,52 @@ function CommunityDetailsPage() {
     refetch();
   };
 
+  // const [uploading, setUploading] = useState(false);
+
+  // const handleImageSelect = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   if (!file.type.startsWith("image/")) {
+  //     toast.error("Please select a valid image");
+  //     return;
+  //   }
+
+  //   if (file.size > 5 * 1024 * 1024) {
+  //     toast.error("Image must be less than 5MB");
+  //     return;
+  //   }
+
+  //   try {
+  //     setUploading(true);
+
+  //     const response = await uploadCommunityCover(file, communityId);
+
+  //     if (response?.data?.content?.profileImageUrl) {
+  //       // setUser((prevUser) => {
+  //       //   const updatedUser = {
+  //       //     ...prevUser,
+  //       //     profileImageUrl: response.data.content.profileImageUrl,
+  //       //   };
+  //       //   setItemInLocalStorage("user", updatedUser);
+  //       //   return updatedUser;
+  //       // });
+  //     } else {
+  //       toast.error("Failed to upload profile picture");
+  //       return;
+  //     }
+
+  //     toast.success("Profile picture updated");
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast.error(
+  //       error?.response?.data?.message || "Failed to upload profile picture",
+  //     );
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
+
   return (
     <>
       <div className="space-y-6">
@@ -192,6 +245,29 @@ function CommunityDetailsPage() {
               <div
                 className={`relative h-[180px] rounded-[4px] ${community?.coverImageUrl ? `bg-[url(${community?.coverImageUrl})]` : "bg-[url(/Mask-group.svg)]"} bg-cover bg-center bg-no-repeat lg:h-[229px]`}
               >
+                {/* <Label
+                  htmlFor="image"
+                  className="absolute right-0 bottom-0 flex h-[80px] w-[80px] shrink-0 cursor-pointer items-center justify-center rounded-full"
+                >
+                  <Input
+                    onChange={handleImageSelect}
+                    type="file"
+                    id="image"
+                    className="hidden"
+                    disabled={
+                      uploading ||
+                      !user ||
+                      user.id !== community?.communityOwnerId
+                    }
+                  />
+                  <div className="absolute right-0 bottom-0 rounded-full bg-[#F7F9FD] p-2">
+                    {uploading ? (
+                      <ImSpinner5 className="animate-spin" />
+                    ) : (
+                      <FaPlus className="text-[#2F0FD1]" />
+                    )}
+                  </div>
+                </Label> */}
                 <div className="absolute -bottom-1/3 left-1/2 h-[118px] w-[118px] -translate-x-1/2 rounded-full bg-white p-2 lg:left-10 lg:h-[140px] lg:w-[140px] lg:translate-x-0">
                   <div className="h-full rounded-full bg-[#F2F2F7] p-5">
                     {community?.logoUrl ? (
@@ -200,6 +276,30 @@ function CommunityDetailsPage() {
                       <img src="/ChartPolar (1).svg" alt="" />
                     )}
                   </div>
+
+                  {/* <Label
+                    htmlFor="image"
+                    className="absolute right-7 bottom-10 flex h-[80px] w-[80px] shrink-0 cursor-pointer items-center justify-center rounded-full"
+                  >
+                    <Input
+                      onChange={handleImageSelect}
+                      type="file"
+                      id="image"
+                      className="hidden"
+                      disabled={
+                        uploading ||
+                        !user ||
+                        user.id !== community?.communityOwnerId
+                      }
+                    />
+                    <div className="absolute right-0 bottom-0 rounded-full bg-[#F7F9FD] p-2">
+                      {uploading ? (
+                        <ImSpinner5 className="animate-spin" />
+                      ) : (
+                        <FaPlus className="text-[#2F0FD1]" />
+                      )}
+                    </div>
+                  </Label> */}
                 </div>
               </div>
 
@@ -298,13 +398,13 @@ function CommunityDetailsPage() {
                           : "bg-[#2F0FD1] hover:bg-[#2F0FD1]/70"
                       } px-8 py-5`}
                     >
-                      {joinCommunityPending
-                        ? "Joining..."
-                        : leaveCommunityPending
-                          ? "Leaving..."
-                          : community?.isMember
-                            ? "Leave"
-                            : "Join"}
+                      {joinCommunityPending || leaveCommunityPending ? (
+                        <ImSpinner5 className="animate-spin" />
+                      ) : community?.isMember ? (
+                        "Leave"
+                      ) : (
+                        "Join"
+                      )}
                     </Button>
                   )}
                 </div>
@@ -388,7 +488,12 @@ function CommunityDetailsPage() {
                 <>
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {quests.map((quest, i) => (
-                      <TasksCard task={quest} key={i} tag="task-page" />
+                      <TasksCard
+                        task={quest}
+                        key={i}
+                        tag="task-page"
+                        communityAlias={community.communityAlias}
+                      />
                     ))}
                   </div>
 

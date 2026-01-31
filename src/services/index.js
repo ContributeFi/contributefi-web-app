@@ -204,6 +204,22 @@ export const uploadProfilePicture = (file) => {
   );
 };
 
+export const uploadCommunityCover = (file, communityId) => {
+  const formData = new FormData();
+
+  formData.append("image", file);
+
+  return api.post(
+    `${import.meta.env.VITE_BASE_URL}/communities/upload-logo-cover/${communityId}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    },
+  );
+};
+
 export const updateBio = (bio) => {
   return api.patch(`${import.meta.env.VITE_BASE_URL}/users/update-profile`, {
     bio,

@@ -1,14 +1,29 @@
 import { TASK_TAG_BG } from "@/lib/constants";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
-function TasksCard({ task, tag }) {
+function TasksCard({ task, tag, communityAlias }) {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  console.log({ location });
 
   const handleOpen = () => {
-    const params = new URLSearchParams(window.location.search);
-    params.set("task", task.questTitle);
-    navigate(`/dashboard/tasks?${params.toString()}`, { replace: false });
-    return;
+    if (location.pathname.startsWith("/dashboard/communities/")) {
+      navigate(
+        `/dashboard/communities/${encodeURIComponent(
+          communityAlias,
+        )}/${encodeURIComponent(task.id)}`,
+        {
+          replace: false,
+        },
+      );
+      return;
+    } else {
+      navigate(`/dashboard/tasks/${encodeURIComponent(task.id)}`, {
+        replace: false,
+      });
+      return;
+    }
   };
 
   return (

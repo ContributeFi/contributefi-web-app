@@ -38,7 +38,6 @@ function CreateAccount() {
     useMutation({
       mutationFn: (data) => createAccount(data),
       onSuccess: async (data, variable) => {
-        console.log({ data });
         if (data.status === 200) {
           if (!data.data.content.isVerified) {
             login({

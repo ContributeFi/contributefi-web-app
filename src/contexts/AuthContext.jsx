@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     setOtp(null);
     setUsername(null);
     removeItemFromLocalStorage("accessToken");
-    removeItemFromLocalStorage("users");
+    removeItemFromLocalStorage("user");
     removeItemFromLocalStorage("email");
     removeItemFromLocalStorage("otp");
     removeItemFromLocalStorage("username");

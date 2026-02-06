@@ -251,7 +251,7 @@ export default function TokenSelectorModal({
 
       const customToken = {
         code: code,
-        contract: issuer,
+        // contract: issuer,
         issuer: issuer,
         name: code,
       };
@@ -269,7 +269,7 @@ export default function TokenSelectorModal({
       const customToken = {
         code: "CUSTOM",
         contract: trimmedSearch,
-        issuer: trimmedSearch,
+        // issuer: trimmedSearch,
         name: "Custom Token",
       };
 
@@ -317,7 +317,7 @@ export default function TokenSelectorModal({
               }}
             >
               <img src={token.icon} alt={token.code} className="h-5 w-5" />
-              {token.name}
+              {token.code}
             </button>
           ))}
         </div>
@@ -333,7 +333,7 @@ export default function TokenSelectorModal({
               <img src={token?.icon} alt={token?.code} className="h-6 w-6" />
               <div>
                 <div className="font-medium text-purple-900 dark:text-white">
-                  {token.name}
+                  {token.code}
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-300">
                   {token.domain}

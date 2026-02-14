@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Testimonial from "@/components/Testimonial";
-import ExploreTask from "@/components/ExploreTask";
+import ExploreQuest from "@/components/ExploreQuest";
 import FeaturedCommunities from "@/components/FeaturedCommunities";
 import Metrics from "@/components/Metrics";
 import CreateWorkAndEarn from "@/components/CreateWorkAndEarn";
@@ -33,7 +33,7 @@ function HomePage() {
 
       <About />
 
-      <ExploreTask />
+      <ExploreQuest />
 
       <CreateWorkAndEarn />
 

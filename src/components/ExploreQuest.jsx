@@ -6,7 +6,7 @@ import Error from "./Error";
 import Empty from "./Empty";
 import { useGetQuest } from "@/hooks/useGetQuest";
 
-function ExploreTask() {
+function ExploreQuest() {
   const navigate = useNavigate();
 
   const LIMIT = 6;
@@ -57,4 +57,4 @@ function ExploreTask() {
   );
 }
 
-export default ExploreTask;
+export default ExploreQuest;

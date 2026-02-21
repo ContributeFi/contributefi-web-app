@@ -1,7 +1,7 @@
 import { TASK_TAG_BG } from "@/lib/constants";
 import { toast } from "react-toastify";
 
-function TasksCard({ task, tag }) {
+function QuestCard({ task }) {
   const handleOpen = () => {
     if (!task.isActive) {
       toast.error("Quest is no longer available");
@@ -17,7 +17,7 @@ function TasksCard({ task, tag }) {
   return (
     <div
       onClick={handleOpen}
-      className={`flex cursor-pointer ${tag === "home-page" || tag === "task-page" ? "" : "cursor-pointer"} flex-col justify-center gap-8 rounded-xl border-2 border-[#F0F4FD] bg-white px-6 py-7`}
+      className={`flex cursor-pointer flex-col justify-center gap-8 rounded-xl border-2 border-[#F0F4FD] bg-white px-6 py-7`}
     >
       <div className="space-y-4">
         <div className="flex flex-wrap gap-2">
@@ -72,4 +72,4 @@ function TasksCard({ task, tag }) {
   );
 }
 
-export default TasksCard;
+export default QuestCard;

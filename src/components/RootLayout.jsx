@@ -13,7 +13,7 @@ function RootLayout() {
         <Header sheetIsOpen={sheetIsOpen} setSheetIsOpen={setSheetIsOpen} />
       </div>
 
-      <main className="pt-30">
+      <main className="space-y-16 pt-40 lg:space-y-26">
         <Outlet />
       </main>
 

@@ -48,7 +48,7 @@ function QuestCard({ task }) {
           </p> */}
           <div className="flex shrink-0 items-center gap-1">
             {/* <div className="h-1 w-1 rounded-full bg-[#636366]" /> */}
-            <p className="flex gap-1.5 font-semibold text-[#8791A7]">
+            <p className="flex gap-1.5 text-base font-semibold text-[#8791A7]">
               <img src="/UsersThree.svg" alt="" />
               <span className="font-light">
                 {task.rewardType === "Token"
@@ -61,10 +61,10 @@ function QuestCard({ task }) {
       </div>
 
       <div className={`space-y-2`}>
-        <p className="max-w-full truncate overflow-hidden font-semibold whitespace-nowrap text-[#1C1C1E]">
+        <p className="max-w-full truncate overflow-hidden text-base font-semibold whitespace-nowrap text-[#1C1C1E]">
           {task.title || task.questTitle}
         </p>
-        <p className="max-w-full truncate overflow-hidden text-[15px] font-normal whitespace-nowrap text-[#636366]">
+        <p className="max-w-full truncate overflow-hidden text-base font-normal whitespace-nowrap text-[#636366]">
           by {task.communityName}
         </p>
       </div>

@@ -24,7 +24,11 @@ function QuestCard({ task }) {
           <div
             className={`w-fit rounded-lg px-3 py-1.25 text-sm font-normal text-[#313131] ${TASK_TAG_BG[task.category]}`}
           >
-            {task.category.split("_").join(" ")}
+            {task.category === "ON_CHAIN"
+              ? "On Chain"
+              : task.category === "GROWTH"
+                ? "Growth"
+                : "Technical"}
           </div>
 
           <div
